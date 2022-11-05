@@ -85,6 +85,17 @@ export async function poolRoutes(fastify: FastifyInstance) {
             })
         }
 
+        if (!pool.ownerId) {
+            await prisma.pool.update({
+                where: {
+                    id: pool.id,
+                },
+                data: {
+                    ownerId: request.user.sub
+                }
+            })
+        }
+
         await prisma.participant.create({
             data: {
                 poolId: pool.id,
